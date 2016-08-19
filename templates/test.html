@@ -1,0 +1,32 @@
+<html>
+<div id="chartContainer">
+  <script src="http://d3js.org/d3.v3.min.js"></script>
+  <script src="http://dimplejs.org/dist/dimple.v2.2.0.min.js"></script>
+  <script type="text/javascript">
+	
+	function updateData(url, svg){
+		d3.json(url, function (data) {
+		  svg.selectAll('*').remove()
+		  var myChart = new dimple.chart(svg, data);
+		  myChart.setBounds(65, 30, 800, 330);
+		  var x = myChart.addCategoryAxis("x", "date");
+		  x.addOrderRule("date");
+		  myChart.addMeasureAxis("y", "close");
+		  var s = myChart.addSeries(null, dimple.plot.line);
+		  myChart.draw();
+		});	
+	}
+	
+	var svg = new Array(6);
+	for(var i = 0; i < 6; i++){
+		(function(i){
+		svg[i] = dimple.newSvg("#chartContainer", 590, 400);
+		var url = "/getdata/node" + i;
+		setInterval(function(){			
+			updateData(url,svg[i]);}, 5000); 
+			})(i)
+	}
+	
+  </script>
+</div>
+</html>
