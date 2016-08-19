@@ -8,7 +8,7 @@ app.config['DEBUG'] = True
 
 
 data = {}
-for i in range(6):
+for i in range(8):
 	key = "node" + str(i)
 	y = [0]*50
 	x = range(2000,2050)

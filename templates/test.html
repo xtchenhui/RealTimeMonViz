@@ -3,27 +3,46 @@
   <script src="http://d3js.org/d3.v3.min.js"></script>
   <script src="http://dimplejs.org/dist/dimple.v2.2.0.min.js"></script>
   <script type="text/javascript">
-	
+	var map = {
+		node0:"Apache",
+		node1:"Tomcat1",
+		node2:"Tomcat2",
+		node3:"Tomcat3",
+		node4:"Haproxy",
+		node5:"Mysql1",
+		node6:"Mysql2",
+		node7:"Mysql3"
+	};
 	function updateData(url, svg){
 		d3.json(url, function (data) {
 		  svg.selectAll('*').remove()
 		  var myChart = new dimple.chart(svg, data);
-		  myChart.setBounds(65, 30, 800, 330);
+		  myChart.setBounds(65, 30, 1000, 230);
 		  var x = myChart.addCategoryAxis("x", "date");
 		  x.addOrderRule("date");
 		  myChart.addMeasureAxis("y", "close");
 		  var s = myChart.addSeries(null, dimple.plot.line);
 		  myChart.draw();
+		  
+		  var arr = url.split('/');
+		  var title = map[arr[arr.length-1]];
+		  svg.append("text")
+		   .attr("x", myChart._xPixels() + myChart._widthPixels()/2)
+		   .attr("y", myChart._yPixels() - 10)
+		   .style("text-anchor", "middle")
+		   .style("font-family", "sans-serif")
+		   .style("font-weight", "bold")
+		   .text(title)
 		});	
 	}
 	
-	var svg = new Array(6);
-	for(var i = 0; i < 6; i++){
+	var svg = new Array(8);
+	for(var i = 0; i < 8; i++){
 		(function(i){
-		svg[i] = dimple.newSvg("#chartContainer", 590, 400);
+		svg[i] = dimple.newSvg("#chartContainer", 1200, 300);
 		var url = "/getdata/node" + i;
 		setInterval(function(){			
-			updateData(url,svg[i]);}, 5000); 
+			updateData(url,svg[i]);}, 2000); 
 			})(i)
 	}
 	
